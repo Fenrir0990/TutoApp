@@ -16,7 +16,7 @@
             </div>
             <div v-show=" tutorials.length === 0 && alltutorials.length >0 ? true : false "><!-- No se encuentran tutoriales || Not tutorials found -->
                 <div class="container center m12">
-                    <h3> No se encontraron tutoriales </h3>
+                    <h3> No se encontraron tutoriales con el titulo: {{buscado}}</h3>
                     <p class="link" @click="resetSearch()" > Ver todos los tutoriales </p>
                 </div>
             </div>
@@ -33,11 +33,11 @@
                         <tr 
                             v-for="tutori in tutorials" 
                             v-bind:key= tutori.id 
-                            v-bind:class="{ sky: tutori.id === tutorial.id}"
+                            v-bind:class="{ teal: tutori.id === tutorial.id}"
                             @click="select(tutori)"
                             >
                             <td>{{tutori.title}}</td>
-                            <td><label><input type="checkbox" v-model="tutori.status" disabled/><span></span></label></td>
+                            <td><label><input type="checkbox" v-model="tutori.state" disabled/><span></span></label></td>
                         </tr>
                     </tbody>
                 </table>    
@@ -47,7 +47,7 @@
                     <hr>
                     <h6>Titulo: {{tutorial.title}}</h6>
                     <p>Descripcion: {{tutorial.description}}</p>
-                    <p>Estado: {{ tutorial.status? "Publicado": "No Publicado" }}</p>
+                    <p>Estado: {{ tutorial.state? "Publicado": "No Publicado" }}</p>
                     <a v-bind:href="tutorial.url" class="btn button">Ir al tutorial</a>
                     <button @click="startEdit()" class="btn button">Editar tutorial</button>
                 </div>
@@ -106,6 +106,7 @@
                     alltutorials:[],
                     tutorial:{},
                     buscar:"",
+                    buscado:"",
                     showDetail:false,
                     showEditor:false,
                     bigList:true,
@@ -130,9 +131,7 @@
                     const array = [...this.alltutorials]
                     const data = array.filter(tuto => tuto.title.includes(a))
                     this.tutorials = data 
-                    if(this.tutorials[0]){
-                        this.haveturotials = !this.haveturotials
-                    }
+                    this.buscado = this.buscar
                     this.buscar = ""
                     console.log(this.tutorials)
                     console.log(this.alltutorials)
@@ -194,6 +193,7 @@
                     const {data} = await axios.get(`${urlApi}/tutorials`)
                     this.tutorials = data
                     this.alltutorials = data
+                    console.log(data)
                 }
                 allTutorials()
             }
@@ -214,4 +214,5 @@
         color: blue;
         cursor:pointer;
     }
+   
 </style>
