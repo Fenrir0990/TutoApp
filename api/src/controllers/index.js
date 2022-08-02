@@ -1,5 +1,4 @@
 const {Tutorial} = require('../db');
-
 const getAll = async (req,res)=>{  
     try{
         const tutorials = await Tutorial.findAll()
@@ -25,6 +24,13 @@ const getForID = async (req,res)=>{
 const post = async (req,res)=>{ 
     const { title, description, url, state } = req.body
     try{
+        
+        if(!title||!description||!url) {
+            
+            return res.json({msg:"missing data"}).state(400)
+            
+        }
+        title = title.charAt(0).toUpperCase() + title.slice(1);
         const tutorial = await Tutorial.create({
             title,
             description,
