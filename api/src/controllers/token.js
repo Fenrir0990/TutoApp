@@ -15,7 +15,7 @@ const jwt = require ("jsonwebtoken")
 
 };
  const generateToken = (req,res,next) => {
-    res.json({msg:jwt.sign( {tuto:"tutoApp",} , SECRET , {expiresIn : "10s"})}).status(200)
+    res.json({msg:jwt.sign( {tuto:"tutoApp",} , SECRET , {expiresIn : "5m"})}).status(200)
 };
 
 module.exports = {

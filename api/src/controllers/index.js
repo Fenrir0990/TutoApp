@@ -25,22 +25,25 @@ const post = async (req,res)=>{
     const { title, description, url, state } = req.body
     try{
         
-        if(!title||!description||!url) {
+        if( !title || !description ) {
             
             return res.json({msg:"missing data"}).state(400)
             
         }
-        title = title.charAt(0).toUpperCase() + title.slice(1);
-        const tutorial = await Tutorial.create({
-            title,
+        console.log( title )
+        var titl = title.charAt (0).toUpperCase () + title.slice(1);
+        console.log ( titl )
+        const tutorial = await Tutorial.create ({
+            title:titl,
             description,
             url,
             state
         })
-        res.status(201).send({ msg: "Tutorial created successfully" })
-    }catch(err){
-        res.json({msg:"Failed to create tutorial", error:err}).status(400)
-        console.log(err)
+        console.log(state)
+        res.status(201).send( { msg: "Tutorial created successfully" } )
+    }catch (err) {
+        res.json( { msg:"Failed to create tutorial", error:err } ).status( 400 )
+        console.log ( err )
         throw err
     }
 };
