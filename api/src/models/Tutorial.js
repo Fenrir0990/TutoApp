@@ -21,7 +21,11 @@ module.exports = (sequelize) => {
     },
     state:{
       type:DataTypes.BOOLEAN,
-      default:false
+      defaultValue:false
+    },
+    deleteAt:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false
     }
   },
   {

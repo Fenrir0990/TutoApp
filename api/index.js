@@ -23,6 +23,13 @@ const tutos = async ()=>{
     url:"https://EstoEsULIink.com",
     state:false
   });
+  const avion = await Tutorial.create({
+    title:"Arbol",
+    description:"Avanzar en el agua sin morir en el intento",
+    url:"https://EstoEsULIink.com",
+    state:false,
+    deleteAt:true
+  });
 };
 conn.sync({ force:true }).then(() => {
   server.listen(3001, () => {
