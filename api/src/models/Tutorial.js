@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
-  // defino el modelo
+  // Model of tutorial
   sequelize.define('tutorial', {
     id: {     
       type:DataTypes.UUID,
@@ -28,8 +28,8 @@ module.exports = (sequelize) => {
       defaultValue:false
     }
   },
-  {
-    timestamps:false
-  })
+  /* {
+    timestamps:false 
+  } */)
   
 }

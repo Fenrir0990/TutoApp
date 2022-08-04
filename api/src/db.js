@@ -4,13 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST,DB_NAME } = process.env;
 
-
-
-/* 
-const sequelize = new Sequelize(`mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/tutoapp2`, {
-  logging: false, // set to console.log to see the raw SQL queries
-  native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-}); */
 let sequelize = new Sequelize(DB_NAME,DB_USER,DB_PASSWORD,{
   host:DB_HOST,
   dialect:"mysql",
@@ -31,6 +24,7 @@ modelDefiners.forEach(model => model(sequelize));
 // Capitalizamos los nombres de los modelos ie: product => Product
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
+
 sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
@@ -41,7 +35,6 @@ const { Tutorial } = sequelize.models;
 // Product.hasMany(Reviews);
 
 module.exports = {
-
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
 };

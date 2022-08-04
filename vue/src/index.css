@@ -1,0 +1,25 @@
+body{
+    margin: 0px;
+    font-family: 'Bitter', serif
+}
+.focus{
+    background-color: #0089805b;
+    color: black;
+}
+.formkit-message{
+    color: red  ;
+}
+.formkit-input{
+    text-decoration: none;
+    color: #fff;
+    background-color: #26a69a;
+    letter-spacing: .5px;
+    font-size: 14px;
+    outline: 0;
+    border: none;
+    border-radius: 2px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px;
+    text-transform: uppercase;
+}

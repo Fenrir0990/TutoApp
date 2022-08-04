@@ -3,103 +3,70 @@
         <div >
             <div class="col">
                 <h1>Tutoriales</h1>
-                <div class = 'primary m12'>
+                <div class = 'primary m12 '>
                     <input  type = 'text' class="" v-model="buscar">
-                    <button class = "btn button" @click="search()" >Buscar</button>
+                    <button class = "btn button " @click="search()" >Buscar</button>
                 </div>
             </div>
-            <div v-show="alltutorials.length === 0?true:false"> <!-- No hoy tutoriales || Not have tutorials -->
-                <div class="container center m12">
-                    <h3>No hay tutoriales</h3>
-                    <p class="link"><router-link to= '/form'>Agregar Tutorial</router-link></p>
-                </div>
+            <div class="center">
+                <button v-show="view2" class="btn red black-text card waves-effect waves-light" @click="destroy()">Eliminar todos los tutoriales</button>
             </div>
-            <div v-show=" tutorials.length === 0 && alltutorials.length >0 ? true : false "><!-- No se encuentran tutoriales || Not tutorials found -->
-                <div class="container center m12">
-                    <h3> No se encontraron tutoriales con el titulo: {{buscado}}</h3>
-                    <p class="link" @click="resetSearch()" > Ver todos los tutoriales </p>
-                </div>
+            <div v-show="view1"> 
+                <Msg ruta="/form">
+                    <template #title="{text}">{{text.text1}}</template>
+                    <template #textR="{text}">{{text.text3}}</template>
+                </Msg> 
             </div>
-            <div class=" row m12 " v-show = " tutorials.length === 0 || alltutorials.length===0 ?false:true" >
+            <div v-show = "tutorials.length===0 && alltutorials.length>0? true : false">
+                <Msg ruta="/form" :func="resetSearch">
+                    <template #title="{text}">{{text.text2}} con el titulo: {{buscado}}</template>
+                    <template #textF="{text}">{{text.text4}}</template>
+                </Msg> 
+            </div>
+            <div class=" row m12 " v-show = "view2" >
                 <div class= "col m6" v-bind:class="{m12:!showDetail && !showEditor}" v-show="!showEditor">
-                <table class="" v-show="tutorials.length === 0?false:true" >
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Publicado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr 
-                            v-for="tutori in tutorials" 
-                            v-bind:key= tutori.id 
-                            v-bind:class="{ teal: tutori.id === tutorial.id}"
-                            @click="select(tutori)"
-                            >
-                            <td>{{tutori.title}}</td>
-                            <td><label><input type="checkbox" v-model="tutori.state" disabled/><span></span></label></td>
-                        </tr>
-                    </tbody>
-                </table>    
-                </div>
-                <div class= "col m6" v-show="showDetail">
-                    <h5>Tutorial</h5>
+                    <Tutorial :tutorial="tutorial" :alltutorials="alltutorials" :tutorials="tutorials" :select="select"></Tutorial>
+                </div> 
+                <div class= "col m6 " v-show="showDetail">
+                    <Detail :url="tutorial.url" :buttfuntion="startEdit">
+                        <template #titulo>Tutorial</template>
+                        <template #name>{{tutorial.title}}</template>
+                        <template #description>{{tutorial.description}}</template>
+                        <template #state> {{tutorial.state ? "publicado" : "No publicado"}}</template>
+                        <template #button2> Editar </template>
+                    </Detail>
+                    <!-- <h5>Tutorial</h5>
                     <hr>
-                    <h6>Titulo: {{tutorial.title}}</h6>
-                    <p>Descripcion: {{tutorial.description}}</p>
-                    <p>Estado: {{ tutorial.state? "Publicado": "No Publicado" }}</p>
-                    <a v-bind:href="tutorial.url" class="btn button">Ir al tutorial</a>
-                    <button @click="startEdit()" class="btn button">Editar tutorial</button>
+                    <h6>Titulo: {{ tutorial.title }}</h6>
+                    <p>Descripcion: {{ tutorial.description }}</p>
+                    <p>Estado: {{ tutorial.state ? "Publicado" : "No Publicado" }}</p>
+                    <a v-bind:href=" tutorial.url " class="btn button">Ir al tutorial</a>
+                    <button @click = " startEdit() " class = "btn button" >Editar tutorial</button> -->
                 </div>
-                <div class= "col m12" v-show="showEditor">
-                    <h5>Editar tutorial</h5>
-                    <hr>
-                    <form @submit.prevent="edit">
-                    <div class= "firstContainer col m12">
-
-                    <div class="col m3 margin">
-                        <label>Title</label>
-                        <input type="text" v-model="tutorial.title"/>
-                        <p class="error" v-show="first && error.title">Necesita Un titulo</p>
-                    </div>
-                    <div class="col m3 margin">
-                        <label>Description</label>
-                        <input type="text"  v-model="tutorial.description"/>
-                    <p class="error" v-show="first && error.description">Necesita una descripcion</p> 
-
-                    </div>
-                    <div class="col  m3 margin">
-                        <label>Url</label>
-                        <input type="text"  v-model="tutorial.url" />
-                        <p class="error" v-show="first && error.url.voice" > Necesita un url </p>
-                        <p class="error" v-show="first && error.url.notValid" > Url invalido </p> 
-                    </div>
-                    <div class="col ">
-                        <label>Estado</label>
-                        <br>
-                        <label><input type="checkbox" v-model= "tutorial.status"/><span>{{tutorial.status? "Publicado": "No publicado"}}</span></label>
-                    </div>
-                    </div>
-                    <br>
-                    <div class="row m3">
-                        <span>
-                            <button class="btn button" type="submit">┣Editar✎┤</button>
-                            <button class = "btn button" @click = "startEdit()">┣No editar┤</button>
-                            <button class = "btn button red" type="button" @click = "deleted()">┣Eliminar┤</button>
-                        </span>
-                    </div>
-                    </form>
+                <div class= "col m12" v-if="showEditor">
+                     <Editor :tutorial = "tutorial" :closeEditor="closeEditor" :deleTuto="deleTuto"></Editor> 
                 </div>
-            </div>
-    </div>
+            </div> 
         </div>
+    </div>
 </template>
 
 <script>
-    import {urlApi} from "../../vars"
+/**Depende**/
     import axios from "axios"
+    /**Variabls**/
+    import {urlApi} from "../../utils"
+    /**Components**/
+    import Tutorial from '../../components/Tutorial.vue'
+    import Editor from "../../components/Editor.vue"
+    import Detail from "../../components/Detail.vue"
+    import Msg from "../../components/Msg.vue"
+    /**Functions**/ 
+    import { deleteAll, getAllTutorials } from '../../utils/functions'
+
     export default {
         name:'Home-a',
+        components: { Tutorial, Editor, Detail, Msg }, 
             data(){
                 return{
                     tutorials:[],
@@ -109,71 +76,83 @@
                     buscado:"",
                     showDetail:false,
                     showEditor:false,
-                    bigList:true,
-                    first:true,
-                    haveturotials:true,
-                    error:{
-                        title:false,
-                        description:false,
-                        url:{
-                            voice:false,
-                            notValid:false
-                        },
-                    },
+                    /* bigList:true, */
                 }
             },
+                    computed:{
+                        view1(){
+                            return this.alltutorials.length === 0? true : false
+                        },
+                        view2(){
+                            return this.alltutorials.length === 0 || this.tutorials.length === 0 ? false : true
+                        },
+                        view3(){
+                            return this.tutorials.length === 0 && this.alltutorials.length ==! 0 ? true : false
+                        }   
+                    },
             methods :{
+                async destroy(){
+                    deleteAll()
+                    const {data} = await axios.get(`${urlApi}/tutorials`)
+                    this.tutorials = []
+                    this.alltutorials = []
+                    return data
+                },
+                async deleTuto(id){
+                    const {data} = await axios.delete(`${urlApi}/tutorials/${id}`)
+                    if(data.msg === "Tutorial deleted"){
+                        const newList = [...this.alltutorials].filter(tuto => {
+                            if(tuto.id === id) {
+                                return false
+                            }
+                            return true
+                        })
+                        this.alltutorials = newList
+                        this.tutorials = newList
+                        this.showEditor = false
+                        this.showDetail = false
+                    }else{
+                        alert(data.msg)
+                    }
+                },
+
                 search(){
-                   /*  console.log(this.tutorials)
-                    this.tutorials = this.alltutorials.filter(tuto=>{console.log(tuto)})
-                    console.log(this.tutorials)*/
                     const a = `${this.buscar}` 
                     const array = [...this.alltutorials]
-                    const data = array.filter(tuto => tuto.title.includes(a))
+                    const data = array.filter(tuto => tuto.title.toLowerCase().includes(a.toLowerCase()))
                     this.tutorials = data 
                     this.buscado = this.buscar
                     this.buscar = ""
-                    console.log(this.tutorials)
-                    console.log(this.alltutorials)
+                },
+                closeEditor(){
+                    this.showDetail = true
+                    this.showEditor = false
                 },
                 resetSearch(){
                     const data = [...this.alltutorials]
                     this.tutorials = data
                 },
                 async allTutorials(){
-                    const {data} = await axios.get(`${urlApi}/tutorials`)
+                    const data = getAllTutorials()
                     this.tutorials = data
                     this.alltutorials = data
-                },
-                async deleted (){
-                    const {id} = this.tutorial;
-                    const {data} = await axios.delete(`${urlApi}/tutorials/${id}`)
-                    if(data.msg === "Tutorial deleted"){
-                        this.allTutorials()
-                        this.showEditor = false
-                    }else{
-                        alert(data.msg)
-                    }
-                    console.log(data)
                 },
                 startEdit(){
                     this.showEditor = !this.showEditor
                     this.showDetail = !this.showDetail
                 },
-                select (tutorial){
-                if(tutorial.id === this.tutorial.id){
-                    console.log("mismo id")
-                    this.tutorial = {}
-                    this.showDetail=false
-                    this.showEditor= false
-                    return
-                }
-                /* var a = JSON.parse(JSON.stringify(tutorial)) */
-                this.tutorial = {...tutorial}
-                this.showDetail = true
+                select(tutorial) {
+                    if(tutorial.id === this.tutorial.id){
+                        console.log("mismo id")
+                        this.tutorial = {}
+                        this.showDetail= false
+                        this.showEditor= false
+                        return
+                    } 
+                    this.tutorial = {...tutorial}
+                    this.showDetail = true
                },
                 async edit(){
-                    console.log(this.tutorial.id)
                     const {title, description, url,state} = this.tutorial
                     const {data} = await axios.put(`${urlApi}/tutorials/${this.tutorial.id}`,{
                         title,
@@ -181,38 +160,32 @@
                         url,
                         state
                    })
-                   console.log(data)
+                   return data
                },
             },
-            updated() {
-                
-            },
             mounted(){
-                console.log("Mounted on")
                 const allTutorials = async ()=>{
                     const {data} = await axios.get(`${urlApi}/tutorials`)
                     this.tutorials = data
                     this.alltutorials = data
-                    console.log(data)
                 }
                 allTutorials()
             }
         }
 </script>
 <style scoped>
-    .primary{
-        display: flex;
-        flex-direction: row;
-    }
-    .button{
-        margin: 5px;
-    }
-    .sky{
-        background-color: #00ffea;
-    }
-    .link{
-        color: blue;
-        cursor:pointer;
-    }
-   
+.primary{
+    display: flex;
+    flex-direction: row;
+}
+.button{
+    margin: 5px;
+}
+.sky{
+    background-color: #00ffea;
+}
+.link{
+    color: blue;
+    cursor:pointer;
+}
 </style>

@@ -38,11 +38,8 @@ const getAllDeleted = async ( req, res ) => {
 const post = async (req,res)=>{ 
     const { title, description, url, state } = req.body
     try{
-        
         if( !title || !description ) {
-            
             return res.json({msg:"missing data"}).state(400)
-            
         }
         console.log( title )
         var titl = title.charAt (0).toUpperCase () + title.slice(1);
@@ -86,10 +83,6 @@ const deleteForId = async (req,res)=>{
                 deleteAt:true
             },{ where: { id } }
         )
-        /* const a = await Tutorial.update({
-            where: {id}
-        }) */
-
         res.json({msg:`Tutorial deleted`,id:id}).status(200)
     }catch(err){
         res.json({msg:"Error in ---/tutorials/:id--- Delete",error:err}).status(400)
