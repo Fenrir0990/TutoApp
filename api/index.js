@@ -5,31 +5,24 @@ const {Tutorial} = require('./src/db');
 /**************************************************/
 //Carga inicial de tutoriales para trabajar
 const tutos = async ()=>{
-  const caminar = await Tutorial.create({
+  /* const caminar = await Tutorial.create({
     title:"Caminar",
-    description:"Se pone un pie adelante del otro repetidamente",
-    url:"https://EstoEsULIink.com",
+    description:"Como caminar correctamente ",
+    url:"https://www.youtube.com/watch?v=Ibq0vPk7JxA&ab_channel=Fisiocare",
     state:false
   });
   const respirar = await Tutorial.create({
-    title:"Nespirar",
-    description:"Chupar aire por la nariz de forma automatica",
-    url:"https://EstoEsULIink.com",
+    title:"Nadar",
+    description:"Como aprender a nadar",
+    url:"https://www.youtube.com/watch?v=hu_CdkWZdFk&ab_channel=Nataci%C3%B3n%28SkillsNT%29",
     state:true
   });
   const nadar = await Tutorial.create({
-    title:"Nadar",
-    description:"Avanzar en el agua sin morir en el intento",
-    url:"https://EstoEsULIink.com",
+    title:"Como hacer una mesa",
+    description:"En este tutorial aprenderas a hacer una mesa.",
+    url:"https://www.youtube.com/watch?v=C2fQfdqqons&ab_channel=BarquitodeVapor",
     state:false
-  });
-  const avion = await Tutorial.create({
-    title:"Arbol",
-    description:"Avanzar en el agua sin morir en el intento",
-    url:"https://EstoEsULIink.com",
-    state:false,
-    deleteAt:true
-  });
+  }); */
 };
 conn.sync({ force:true }).then(() => {
   server.listen(3001, () => {
