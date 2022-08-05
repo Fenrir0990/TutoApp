@@ -1,53 +1,54 @@
 <template>
-    <div class = 'container col firstContainer'>
-        <div >
-            <div class="col">
-                <h1>Tutoriales</h1>
-                <div class = 'primary m12 '>
-                    <input  type = 'text' class="" v-model="buscar">
-                    <button class = "btn button " @click="search()" >Buscar</button>
-                </div>
+    <div class="flexCol">
+        <div class=" container row center" >
+            <h1 class=" mTitle">Tutoriales</h1>
+            <div class = 'm12'>
+                <input  type = 'text' class="" v-model="buscar">
+                <button class = "btn button " @click="search()" >Buscar</button>
             </div>
-            <div class="center">
-                <button v-show="view2" class="btn red black-text card waves-effect waves-light" @click="destroy()">Eliminar todos los tutoriales</button>
-            </div>
-            <div v-show="view1"> 
-                <Msg ruta="/form">
-                    <template #title="{text}">{{text.text1}}</template>
-                    <template #textR="{text}">{{text.text3}}</template>
-                </Msg> 
-            </div>
-            <div v-show = "tutorials.length===0 && alltutorials.length>0? true : false">
-                <Msg ruta="/form" :func="resetSearch">
-                    <template #title="{text}">{{text.text2}} con el titulo: {{buscado}}</template>
-                    <template #textF="{text}">{{text.text4}}</template>
-                </Msg> 
-            </div>
-            <div class=" row m12 " v-show = "view2" >
-                <div class= "col m6" v-bind:class="{m12:!showDetail && !showEditor}" v-show="!showEditor">
-                    <Tutorial :tutorial="tutorial" :alltutorials="alltutorials" :tutorials="tutorials" :select="select"></Tutorial>
-                </div> 
-                <div class= "col m6 " v-show="showDetail">
-                    <Detail :url="tutorial.url" :buttfuntion="startEdit">
-                        <template #titulo>Tutorial</template>
-                        <template #name>{{tutorial.title}}</template>
-                        <template #description>{{tutorial.description}}</template>
-                        <template #state> {{tutorial.state ? "publicado" : "No publicado"}}</template>
-                        <template #button2> Editar </template>
-                    </Detail>
-                    <!-- <h5>Tutorial</h5>
-                    <hr>
-                    <h6>Titulo: {{ tutorial.title }}</h6>
-                    <p>Descripcion: {{ tutorial.description }}</p>
-                    <p>Estado: {{ tutorial.state ? "Publicado" : "No Publicado" }}</p>
-                    <a v-bind:href=" tutorial.url " class="btn button">Ir al tutorial</a>
-                    <button @click = " startEdit() " class = "btn button" >Editar tutorial</button> -->
-                </div>
-                <div class= "col m12" v-if="showEditor">
-                     <Editor :tutorial = "tutorial" :closeEditor="closeEditor" :deleTuto="deleTuto"></Editor> 
-                </div>
-            </div> 
         </div>
+        <div v-if="view1"> 
+            <Msg ruta="/form">
+                <template #title="{text}">{{text.text1}}</template>
+                <template #textR="{text}">{{text.text3}}</template>
+            </Msg> 
+        </div>
+        <div v-if = "view3">
+            <Msg ruta="/form" :func="resetSearch">
+                <template #title="{text}">{{text.text2}} con el titulo: {{buscado}}</template>
+                <template #textF="{text}">{{text.text4}}</template>
+            </Msg> 
+        </div>
+        <center v-show="view2" class="">
+            <button class="btn red black-text card waves-effect waves-light" @click="destroy()">Eliminar todos los tutoriales</button>
+        </center>
+        <div class="  flexRow " v-if = "view2" >
+            <div class= " margin whidtHome mAjust2" v-if="!showEditor">
+                <Tutorial :tutorial="tutorial" :alltutorials="alltutorials" :tutorials="tutorials" :select="select"></Tutorial>
+            </div> 
+            <div class= " margin whidtHome card-panel detailh" v-if="showDetail">
+                <Detail :url="tutorial.url" :buttfuntion="startEdit">
+                    <template #titulo><h4>Edital Tutorial</h4></template>
+                    <template #name>{{tutorial.title}}</template>
+                    <template #description>{{tutorial.description}}</template>
+                    <template #state> {{tutorial.state ? "publicado" : "No publicado"}}</template>
+                    <template #button2> Editar </template>
+                </Detail>
+                
+            </div>
+        </div> 
+            <center class= "ajust majust" v-if="showEditor">
+                    <Aform :activ="edit" :info="tutorial">
+                        <template #title>Editar Tutorial</template>
+                    <template #b1>
+                        <button class = "btn button space" type="button" @click="closeEditor">Volver</button>
+                        <button class = "btn button red space"  type="button" @click = "deleTuto(this.tutorial.id)">Eliminar</button> 
+                    </template>
+                    <template #b2>
+
+                    </template>
+                    </Aform>
+            </center>
     </div>
 </template>
 
@@ -57,8 +58,8 @@
     /**Variabls**/
     import {urlApi} from "../../utils"
     /**Components**/
+    import Aform from "../../components/Aform.vue"
     import Tutorial from '../../components/Tutorial.vue'
-    import Editor from "../../components/Editor.vue"
     import Detail from "../../components/Detail.vue"
     import Msg from "../../components/Msg.vue"
     /**Functions**/ 
@@ -66,7 +67,7 @@
 
     export default {
         name:'Home-a',
-        components: { Tutorial, Editor, Detail, Msg }, 
+        components: { Tutorial , Detail, Msg, Aform }, 
             data(){
                 return{
                     tutorials:[],
@@ -87,15 +88,17 @@
                             return this.alltutorials.length === 0 || this.tutorials.length === 0 ? false : true
                         },
                         view3(){
-                            return this.tutorials.length === 0 && this.alltutorials.length ==! 0 ? true : false
+                            return this.tutorials.length === 0 && this.alltutorials.length > 0 ? true : false
                         }   
                     },
             methods :{
+                
                 async destroy(){
                     deleteAll()
                     const {data} = await axios.get(`${urlApi}/tutorials`)
                     this.tutorials = []
                     this.alltutorials = []
+                    this.showEditor= false
                     return data
                 },
                 async deleTuto(id){
@@ -152,15 +155,34 @@
                     this.tutorial = {...tutorial}
                     this.showDetail = true
                },
-                async edit(){
-                    const {title, description, url,state} = this.tutorial
-                    const {data} = await axios.put(`${urlApi}/tutorials/${this.tutorial.id}`,{
+                async edit(payload){
+                    let {title, description, url,state} = payload
+                    state = state === undefined ? false : true
+                    const pack = {
                         title,
                         description,
                         url,
                         state
-                   })
-                   return data
+                        }
+                    const {data} = await axios.put(`${urlApi}/tutorials/${this.tutorial.id}`,pack)
+                    const newList = [...this.alltutorials].map(tuto=>{
+                        if(this.tutorial.id === tuto.id){
+                            var a = {
+                                title,
+                                description,
+                                url,
+                                state,
+                                id:this.tutorial.id
+                                }
+                            this.tutorial = a
+                            return a
+                        }
+                        return tuto
+                    })
+                    this.alltutorials = newList
+                    this.tutorials = newList
+                    this.closeEditor()
+                    return data
                },
             },
             mounted(){
@@ -174,6 +196,10 @@
         }
 </script>
 <style scoped>
+.ajust{
+    height: 300px;
+    width: auto;
+}
 .primary{
     display: flex;
     flex-direction: row;

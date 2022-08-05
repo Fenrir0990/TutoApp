@@ -18,63 +18,27 @@
         <div v-show = "!createSuces">
             <h4>Agregar Tutorial</h4>
             <hr>
-            <form @submit.prevent="agregarTutorial">
-                <div class="col margin">
-                    <label>Title</label>
-                    <input type="text" v-model="newTutorial.title"/>
-                    <p class="error" v-show=" error.title">Necesita Un titulo</p>
-                </div>
-                <div class="col margin">
-                    <label>Description</label>
-                    <input type="text"  v-model="newTutorial.description"/>
-                   <p class="error" v-show=" error.description">Necesita una descripcion</p> 
-
-                </div>
-                <div class="col margin">
-                    <label>Url</label>
-                    <input type="text"  v-model="newTutorial.url" />
-                    <p class="error" v-show=" error.url.voice" > Necesita un url </p>
-                    <br>
-                    <p class="error" v-show=" error.url.notValid" > Url invalido </p>
-                </div>
-                <div class="col margin">
-                    <label>Estado     </label>
-                    <label><input type="checkbox" v-model= "newTutorial.status"/><span>{{newTutorial.status? "Publicado": "No publicado"}}</span></label>
-                </div>
-                
-                <button class="btn" type="submit">Agregar</button>
-            </form>
+           <Aform
+           :activ="agregarTutorial"
+           >
+           </Aform>
         </div>
-        <!-- <button class="btn" @click="test()">TEST</button> -->
     </div>
 </template>
 <script>
+    /**Dependencies**/
     import axios from "axios";
+    /**Utils**/
     import { urlApi } from "../../utils";
-    import{ validateForm } from "../../utils/functions"
+    /**Componentes**/
+    import Aform from "../../components/Aform.vue"
 
     export default {
         name:'Form-a',
-         
+        components:{Aform},
         data(){
             return {
-                newTutorial:{
-                    title:'',
-                    description: '',
-                    url:'',
-                    status:false
-                },
-                error:{
-                    title:false,
-                    description:false,
-                    url:{
-                        voice:false,
-                        notValid:false
-                    },
-                },
                 createSuces:false,
-                first:false,
-                
             }
         },
         methods: {
@@ -88,23 +52,12 @@
                     title:'',
                     description: '',
                     url:'',
-                    status:false
+                    state:false
                 }
                 this.createSuces = !this.createSuces
             },
-           async agregarTutorial(){
-                var {title,description,url,status} = {...this.newTutorial};
-                var not = validateForm(this.newTutorial).not
-                this.error = validateForm(this.newTutorial).error
-                var payload = {
-                    title,
-                    description,
-                    url,
-                    status
-                };
-                if(not){
-                    const {data} = await axios.post(`${urlApi}/tutorials`,payload)
-                    
+           async agregarTutorial(payload){
+                const {data} = await axios.post(`${urlApi}/tutorials`,payload)
                     if(data.msg === 'Tutorial created successfully')
                     {
                         this.createSuces = !this.createSuces
@@ -113,16 +66,9 @@
                     if(data.msg === "Access denied, token incorrect or expired")
                     {
                         alert("El formulario a expirado");
-                        location.reload()
                         this.$router.go(0)
                         return
                     }
-                }
-                
-                alert("Tutorial invalido")
-                
-
-
             }
         },
          mounted() {
@@ -135,16 +81,9 @@
 </script>
 <style scoped>
 
-.margin {
-    padding: 10px;
-}
 .button{
     margin: 5px;
 }
-.ajust{
-    padding-bottom:50px;
-}
-
 .error{
     color: red;
 }

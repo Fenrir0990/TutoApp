@@ -2,7 +2,7 @@
   <div class="contained">
     <h5><slot name="title">Informacion</slot></h5>
     <hr>
-    <p> ▶ Nombre : <slot name="name"></slot></p>
+    <p> ▶ Titulo : <slot name="name"></slot></p>
     <p> ▶ Descripcion : <slot name="description"></slot></p>
     <p> ▶ Estado : <slot name="state"></slot> <!-- {{ tutorial.state ? "Publicado" : "No Publicado" }} --></p>
     <a v-bind:href = "url" class ="btn space" >Ir al tutorial</a>

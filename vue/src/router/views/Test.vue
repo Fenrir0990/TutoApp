@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Form from "../../components/Cform.vue"
+import Form from "../../components/Aform.vue"
 export default {
     name:"test-a",
     components:{

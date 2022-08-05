@@ -1,7 +1,7 @@
 <template>
-    <div class="container center">
+    <div class="con_ten" >
             
-        <table class="table-fill">
+        <table id ="table" class="table-fill tableA">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -29,10 +29,17 @@
         props:{ 
             tutorials:{ 
                 type:Array,
+                default:()=>[]
                 
             },
-            select:Function,
-            tutorial:Object,
+            select:{
+                type:Function,
+                default:()=>{return}
+                },
+            tutorial:{
+                type:Object,
+                default:()=>{return {}}
+                },
         },
     }
 </script>

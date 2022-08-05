@@ -11,8 +11,8 @@ body{
 }
 .formkit-input{
     text-decoration: none;
-    color: #fff;
-    background-color: #26a69a;
+    color:black;
+    background-color: #29cdbd;
     letter-spacing: .5px;
     font-size: 14px;
     outline: 0;
@@ -22,4 +22,98 @@ body{
     line-height: 36px;
     padding: 0 16px;
     text-transform: uppercase;
+}
+.flexRow{
+    padding: 0;
+    margin: 0;
+    
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.flexCol{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+}
+.margin{
+    margin: 20px;
+}
+.detailh{
+    height: 300px;
+}
+.whidtHome{
+    width: 40%;
+}
+.burger{
+    background-color: transparent;
+    border: none;
+    display: none ;
+    color: white;
+}
+.list{
+    margin: 0;
+    background-color: white;
+    display: none;
+}
+.open{
+   color: black;
+}
+
+input{
+    box-shadow: 3px #29cdbd;
+}
+
+@media screen and (max-width:576px){
+    .tableA{
+        color: black;
+    }
+    .table{
+       width: 50%;
+    }
+    .burger{
+        display: block;
+        max-height: 100%;
+    }
+    .list{
+        display: flex;
+        width: 70vw;
+        position: absolute;
+        flex-direction: column;
+        z-index: 10;
+        box-shadow: 3px 10px 51px 7px rgba(0,0,0,0.39);
+        font-size: 20px;
+        left: -80%; 
+        transition: .5s ease-in-out; 
+    }
+    .list li{
+        margin-left: 20px;
+        margin-top: 10px;   
+    }
+    .list hr {
+        margin: 0;
+        /* align-self: center; */
+        color: rgb(255, 255, 255);
+        margin-top: 6px;
+    }
+    .open{
+        transform: translateX( 110% );
+        transition: 0.5s ease-in-out;
+    }
+    .mTitle{
+        font-size: 50px;
+    }
+    .majust{
+        align-self: center;
+    }
+    .mAjust2{
+        align-self: center;
+    }
+   .con_ten{
+    width: 350px;
+    display: absolute;
+    
+   }
 }

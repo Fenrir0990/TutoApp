@@ -1,37 +1,35 @@
 <template>
-   <div class="container col firstContainer">
-        <div>
-            <div class="col">
-                <h1>Tutoriales Eliminados</h1>
-                <div class = 'primary  '>
-                    <input  type = 'text' class="" v-model="buscar">
-                    <button class = "btn button " @click="search()" >Buscar</button>
-                </div>
+   <div class="flexCol">
+        <div class ="container row center">
+            <h1>Tutoriales Eliminados</h1>
+            <div class = 'm12 row'>
+                <input  type = 'text' class="" v-model="buscar">
+                <button class = "btn button " @click="search()" >Buscar</button>
             </div>
-            <div v-show = "view1"> 
-                <Msg  ruta="/form" >
-                    <template #title="{text}" >{{text.text1}} Eliminados</template>
-                </Msg> 
+        </div>    
+        <div v-show = "view1"> 
+            <Msg  ruta="/form" >
+                <template #title="{text}" >{{text.text1}} Eliminados</template>
+            </Msg> 
+        </div>
+        <div v-show = "view3">
+            <Msg ruta="/form" :func = "resetSearch">
+                <template #title="{text}">{{text.text1}} con el titulo: {{buscado}}</template>
+                <template #textF="{text}">{{text.text4}}</template>
+            </Msg>
+        </div>
+        <div  class=" flexRow" v-if="view2">
+            <div class= "margin whidtHome" >
+                <Tutorial :tutorial="tutorial" :tutorials="tutorials" :select="select"></Tutorial>
             </div>
-            <div v-show = "view3">
-                <Msg ruta="/form" :func = "resetSearch">
-                    <template #title="{text}">{{text.text1}} con el titulo: {{buscado}}</template>
-                    <template #textF="{text}">{{text.text4}}</template>
-                </Msg> 
-            </div>
-            <div  class=" row panel" v-show="view2">
-                <div class= "col m6" v-bind:class="{m12:!showDetail}" >
-                    <Tutorial :tutorial="tutorial" :tutorials="tutorials" :select="select"></Tutorial>
-                </div>
-                <div class="col m6" v-show="showDetail">
-                    <Detail :url="tutorial.url" :buttfuntion="restore">
-                            <template #titulo="">Tutorial a Restaurar</template>
-                            <template #name="">{{tutorial.title}}</template>
-                            <template #description>{{tutorial.description}}</template>
-                            <template #state> {{tutorial.state ? "publicado" : "No publicado"}}</template>
-                            <template #button2>Restaurar</template>
-                    </Detail>
-                </div>
+            <div class="margin detailh whidtHome card-panel" v-if="showDetail">
+                <Detail :url="tutorial.url" :buttfuntion="restore">
+                        <template #titulo="">Tutorial a Restaurar</template>
+                        <template #name="">{{tutorial.title}}</template>
+                        <template #description>{{tutorial.description}}</template>
+                        <template #state> {{tutorial.state ? "publicado" : "No publicado"}}</template>
+                        <template #button2>Restaurar</template>
+                </Detail>
             </div>
         </div>
    </div>

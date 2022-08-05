@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { urlApi } = require(".");
 /********** Validators **********/
-const isValidUrl = (str) => {
+ const isValidUrl = (str) => {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
@@ -9,34 +9,42 @@ const isValidUrl = (str) => {
     '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
      return pattern.test(str);
-    }
+}
 
 const validateForm = (data)=>{
     var {title,description,url} = data;
     let not = true
-    var error = {url:{}}
+    var error = {
+        description:{},
+        url:{}
+    }
     
     if(!title) {
         error.title = true
         not = false
-        }
-    if(title)error.title = false
+    }
+    else{
+        error.title = false
+    }
     if(!description) {
-        error.description = true
+        error.description.required = true
         not = false
-        }
-    if(description) error.description = false
-    if(!url){
-        error.url.voice = true
+    }
+    else {
+        error.description.required = false
+    }
+    if(description.length < 10){
+        error.description.min = true
         not = false
-        }
-    if(url)error.url.voice = false
+    }else{
+        error.description.min = false
+    }
     if(!isValidUrl(url)){
         error.url.notValid = true
         not = false
         
         }
-    else if (isValidUrl(url)){
+    else{
         error.url.notValid = false
     }
     
